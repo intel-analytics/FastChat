@@ -671,10 +671,10 @@ async def generate_completion_stream_generator(
                     if content.get("finish_reason", None) is not None:
                         finish_stream_events.append(chunk)
                     continue
-                yield f"data: {chunk.json(exclude_unset=True, ensure_ascii=False)}\n\n"
+                yield f"data: {json.dumps(chunk.model_dump(exclude_unset=True), ensure_ascii=False)}\n\n"
     # There is not "content" field in the last delta message, so exclude_none to exclude field "content".
     for finish_chunk in finish_stream_events:
-        yield f"data: {finish_chunk.json(exclude_unset=True, ensure_ascii=False)}\n\n"
+        yield f"data: {json.dumps(finish_chunk.model_dump(exclude_unset=True), ensure_ascii=False)}\n\n"
     yield "data: [DONE]\n\n"
 
 
